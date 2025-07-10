@@ -20,6 +20,14 @@ export async function handlePROpen(
   const { pull_request } = event;
   if (!pull_request) return;
 
+  // 리뷰어가 없으면 5초 대기 후 한 번 더 확인
+  let requestedReviewers = getReviewerSlackId({ pull_request }, reviewers);
+  if (!requestedReviewers) {
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+    requestedReviewers = getReviewerSlackId({ pull_request }, reviewers);
+    if (!requestedReviewers) return;
+  }
+
   const owner = github.context.repo.owner;
   const repo = github.context.repo.repo;
   const prNumber = pull_request.number;
