@@ -21,11 +21,13 @@ export async function getSlackMessage(ts: string) {
   return null;
 }
 
-export async function postMessage(blocks: any) {
+export async function postMessage(blocks: any, text?: string) {
+  // text가 없으면 fallback으로 기본 메시지 생성
+  const fallbackText = text || (blocks && blocks[0]?.text?.text) || "PR 코드리뷰 요청이 도착했습니다.";
   const res = await slackClient.chat.postMessage({
     channel: slackChannel,
     blocks,
-    text: "pr open message",
+    text: fallbackText,
   });
   return res.ts;
 }

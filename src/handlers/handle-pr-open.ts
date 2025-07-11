@@ -19,38 +19,8 @@ export async function handlePROpen(
 ) {
   const { pull_request } = event;
   if (!pull_request) return;
-
-  // 리뷰어가 없으면 5초 대기 후 한 번 더 확인
-  let requestedReviewers = getReviewerSlackId({ pull_request }, reviewers);
-  if (!requestedReviewers) {
-    await new Promise((resolve) => setTimeout(resolve, 5000));
-    requestedReviewers = getReviewerSlackId({ pull_request }, reviewers);
-    if (!requestedReviewers) return;
-  }
-
-  const owner = github.context.repo.owner;
-  const repo = github.context.repo.repo;
-  const prNumber = pull_request.number;
-
-  // send slack message
-  const blocks = buildSlackBlock(reviewers, pull_request);
-  const ts = await postMessage(blocks);
-
-  debug({ ts, owner, repo, prNumber });
-
-  // save the slack message ts as PR comment
-  const prOpenComment = i18n.t("pr_open_comment");
-  const slackMessageComment = `${prOpenComment}(https://${slackWorkspace}.slack.com/archives/${slackChannel}/p${ts?.replace(
-    ".",
-    ""
-  )})\n<!-- (ts${ts}) ${SKIP_COMMENT_MARKER} -->`;
-  await addCommentToPR(
-    octokit.rest,
-    prNumber,
-    owner,
-    repo,
-    slackMessageComment
-  );
+  // PR 생성 시점에는 슬랙 메시지 전송하지 않음
+  return;
 }
 
 function buildSlackBlock(reviewers: Reviewers, pullRequest: any) {
