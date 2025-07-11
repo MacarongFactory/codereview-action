@@ -22,8 +22,15 @@ export async function getSlackMessage(ts: string) {
 }
 
 export async function postMessage(blocks: any, text?: string) {
-  // text가 없으면 fallback으로 기본 메시지 생성
-  const fallbackText = text || (blocks && blocks[0]?.text?.text) || "PR 코드리뷰 요청이 도착했습니다.";
+  // blocks에서 첫 section block의 text.text를 fallback text로 사용
+  const fallbackText =
+    text ||
+    (Array.isArray(blocks)
+      ? blocks.find(
+          (block: any) => block.type === "section" && block.text?.type === "mrkdwn"
+        )?.text.text
+      : undefined) ||
+    "PR 코드리뷰 요청이 도착했습니다.";
   const res = await slackClient.chat.postMessage({
     channel: slackChannel,
     blocks,
