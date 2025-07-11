@@ -43667,11 +43667,16 @@ async function postMessage(blocks) {
     return res.ts;
 }
 async function updateMessage(ts, blocks) {
+    const fallbackText =
+    blocks.find(
+      (block) => block.type === "section" && block.text?.type === "mrkdwn"
+    )?.text.text || "코드리뷰 요청";
+
     await exports.slackClient.chat.update({
         channel: slackChannel,
         ts,
         blocks,
-        text: "update pr open message(request review)",
+        text: fallbackText,
     });
 }
 async function postThreadMessage(ts, text) {

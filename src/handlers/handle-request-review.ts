@@ -43,7 +43,7 @@ export async function handleRequestReview(
         type: "section",
         text: {
           type: "mrkdwn",
-          text: `*📮 ${prAuthor}의 리뷰요청: ${newReviewersStr} 😁 *`,
+          text: `*📮 리뷰어: ${newReviewersStr} <${pull_request.html_url}|${prTitle}> by ${prAuthor} *`,
         },
       },
       { type: "divider" },
