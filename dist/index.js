@@ -43561,10 +43561,10 @@ async function notifySlack() {
         (0, utils_1.debug)(event);
         const { action, pull_request, comment, review } = event;
         // create slack message when pr opened
-        if ((action === "opened" || action === "converted_to_draft") &&
-            pull_request) {
-            return await (0, handle_pr_open_1.handlePROpen)(octokit, event, reviewers);
-        }
+        // if ((action === "opened" || action === "converted_to_draft") &&
+        //     pull_request) {
+        //     return await (0, handle_pr_open_1.handlePROpen)(octokit, event, reviewers);
+        // }
         // update existing slack message when reviewers added
         if (action === "review_requested" && pull_request) {
             return await (0, handle_request_review_1.handleRequestReview)(octokit, event, reviewers);

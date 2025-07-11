@@ -32,12 +32,12 @@ async function notifySlack() {
     const { action, pull_request, comment, review } = event;
 
     // create slack message when pr opened
-    if (
-      (action === "opened" || action === "converted_to_draft") &&
-      pull_request
-    ) {
-      return await handlePROpen(octokit, event, reviewers);
-    }
+    // if (
+    //   (action === "opened" || action === "converted_to_draft") &&
+    //   pull_request
+    // ) {
+    //   return await handlePROpen(octokit, event, reviewers);
+    // }
 
     // update existing slack message when reviewers added
     if (action === "review_requested" && pull_request) {
