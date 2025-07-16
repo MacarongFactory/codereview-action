@@ -41,7 +41,7 @@ async function notifySlack() {
 
     // update existing slack message when reviewers added
     if (action === "review_requested" && pull_request) {
-      return await handleRequestReview(octokit, event, reviewers);
+      return await handlePROpen(octokit, event, reviewers);
     }
 
     // comment on slack thread when github comment created
