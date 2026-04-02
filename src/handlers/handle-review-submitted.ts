@@ -86,7 +86,9 @@ export async function handleReviewSubmitted(
     }
   }
 
-  await postThreadMessage(ts, lastMessage);
+  if (lastMessage) {
+    await postThreadMessage(ts, lastMessage);
+  }
 }
 
 export async function listReviewComments(
