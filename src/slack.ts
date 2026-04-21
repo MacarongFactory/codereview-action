@@ -40,6 +40,8 @@ export async function updateMessage(ts: string, blocks: any) {
 }
 
 export async function postThreadMessage(ts: string, text: string) {
+  if (!text?.trim()) return;
+
   if (!text.includes("![image](")) {
     return await slackClient.chat.postMessage({
       channel: slackChannel,
