@@ -43397,8 +43397,7 @@ async function handleReviewSubmitted(octokit, event, reviewers) {
             continue;
         const commentAuthor = reviewers.reviewers.find((rev) => rev.githubName === comment.user?.login);
         const message = (0, generate_comment_1.generateComment)(commentAuthor?.name ?? comment.user?.login ?? "bot", comment.body);
-        core.info("Message constructed:");
-        core.debug(message);
+        core.info(`Message constructed: ${message}`);
         await (0, slack_1.postThreadMessage)(ts, message);
     }
     let lastMessage = "";
@@ -43418,7 +43417,9 @@ async function handleReviewSubmitted(octokit, event, reviewers) {
             lastMessage = (0, generate_comment_1.generateComment)(commentAuthorName, review.body + assigneeMention);
         }
     }
-    await (0, slack_1.postThreadMessage)(ts, lastMessage);
+    if (lastMessage) {
+        await (0, slack_1.postThreadMessage)(ts, lastMessage);
+    }
 }
 async function listReviewComments(octokit, owner, repo, prNumber) {
     const response = await octokit.rest.pulls.listReviewComments({
@@ -43662,7 +43663,7 @@ async function postMessage(blocks) {
     const res = await exports.slackClient.chat.postMessage({
         channel: slackChannel,
         blocks,
-        text: "pr open message",
+        text: `pr open: ${blocks.text.text}`,
     });
     return res.ts;
 }
@@ -43671,10 +43672,12 @@ async function updateMessage(ts, blocks) {
         channel: slackChannel,
         ts,
         blocks,
-        text: "update pr open message(request review)",
+        text: `review request: ${blocks.text.text}`,
     });
 }
 async function postThreadMessage(ts, text) {
+    if (!text?.trim())
+        return;
     if (!text.includes("![image](")) {
         return await exports.slackClient.chat.postMessage({
             channel: slackChannel,

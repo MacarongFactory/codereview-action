@@ -50,8 +50,7 @@ export async function handleReviewSubmitted(
       commentAuthor?.name ?? comment.user?.login ?? "bot",
       comment.body
     );
-    core.info("Message constructed:");
-    core.debug(message);
+    core.info(`Message constructed: ${message}`);
 
     await postThreadMessage(ts, message);
   }
