@@ -43663,7 +43663,7 @@ async function postMessage(blocks) {
     const res = await exports.slackClient.chat.postMessage({
         channel: slackChannel,
         blocks,
-        text: `pr open: ${blocks.text.text}`,
+        text: `pr open: ${blocks?.[0]?.text?.text ?? "PR opened"}`,
     });
     return res.ts;
 }
@@ -43672,7 +43672,7 @@ async function updateMessage(ts, blocks) {
         channel: slackChannel,
         ts,
         blocks,
-        text: `review request: ${blocks.text.text}`,
+        text: `review request: ${blocks?.[0]?.text?.text ?? "review requested"}`,
     });
 }
 async function postThreadMessage(ts, text) {
