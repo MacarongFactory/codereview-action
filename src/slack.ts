@@ -25,7 +25,7 @@ export async function postMessage(blocks: any) {
   const res = await slackClient.chat.postMessage({
     channel: slackChannel,
     blocks,
-    text: `pr open: ${blocks.text.text}`,
+    text: `pr open: ${blocks?.[0]?.text?.text ?? "PR opened"}`,
   });
   return res.ts;
 }
@@ -35,7 +35,7 @@ export async function updateMessage(ts: string, blocks: any) {
     channel: slackChannel,
     ts,
     blocks,
-    text: `review request: ${blocks.text.text}`,
+    text: `review request: ${blocks?.[0]?.text?.text ?? "review requested"}`,
   });
 }
 
